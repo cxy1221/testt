@@ -49,6 +49,8 @@ public class MongoTest {
         JSONArray jsonarr = new JSONArray();
         String gid = "G2";
         JSONObject json = new JSONObject();
+        JSONArray front_tree = new JSONArray();
+        JSONArray post_tree = new JSONArray();
         for (Document d : data) {
             JSONObject jtmp = new JSONObject(d.toJson());
             JSONArray path = (JSONArray) jtmp.get("PATH");
@@ -58,6 +60,11 @@ public class MongoTest {
             for (int i = 0; i < path.length(); i++) {
                 JSONObject tmp = path.getJSONObject(i);
                 if (tmp.getString("GID").equals(gid)) {
+                    if(i==0){
+                        JSONObject tmp2=new JSONObject();
+                        tmp2.put("IN_ENID",in_enid).put("type","IN_ENID");
+                        front_path = tmp2;
+                    }
                     System.out.println(front_path);
                     break;
                 } else if (front_path.length() != 0) {
@@ -69,10 +76,20 @@ public class MongoTest {
                     JSONObject tmp2=new JSONObject();
                     tmp2.put("IN_ENID",in_enid).put("type","IN_ENID");
                     tmp.put("parents",tmp2);
-                    tmp.put("type","ROOT_GROUP");
+                    tmp.put("type","GROUP");
                     front_path = tmp;
                 }
             }
+            //make trees
+            for (int fidx = 0;fidx<front_tree.length();fidx++){
+                if(front_tree.length()==0){
+                    front_tree.put(front_path);
+                }else{
+
+                }
+            }
+
+
         }
         return jsonarr;
     }
